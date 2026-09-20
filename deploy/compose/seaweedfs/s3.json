@@ -1,0 +1,9 @@
+{
+  "identities": [
+    {
+      "name": "mask-detection",
+      "credentials": [{ "accessKey": "devaccesskey", "secretKey": "devsecretkey-change-me" }],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    }
+  ]
+}

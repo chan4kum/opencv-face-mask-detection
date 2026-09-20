@@ -1,0 +1,41 @@
+{
+  "maksssksksss520.png": {
+    "faces": [
+      {
+        "box": [
+          42,
+          173,
+          112,
+          131
+        ],
+        "label": "with_mask"
+      }
+    ]
+  },
+  "maksssksksss716.png": {
+    "faces": [
+      {
+        "box": [
+          101,
+          174,
+          108,
+          125
+        ],
+        "label": "without_mask"
+      }
+    ]
+  },
+  "maksssksksss748.png": {
+    "faces": [
+      {
+        "box": [
+          179,
+          47,
+          104,
+          122
+        ],
+        "label": "mask_weared_incorrect"
+      }
+    ]
+  }
+}

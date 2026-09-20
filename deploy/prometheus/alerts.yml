@@ -1,0 +1,58 @@
+# Prometheus alerting rules. The same expressions are reused by the Helm chart's PrometheusRule.
+groups:
+  - name: mask-detection
+    rules:
+      - alert: MaskDetectionHighErrorRate
+        expr: |
+          sum(rate(md_http_requests_total{status=~"5.."}[5m]))
+            / clamp_min(sum(rate(md_http_requests_total[5m])), 1e-9) > 0.02
+        for: 10m
+        labels: {severity: page}
+        annotations:
+          summary: "More than 2% of requests are failing with 5xx"
+          runbook_url: "https://github.com/chan4kum/opencv-face-mask-detection/blob/main/docs/RUNBOOK.md#high-error-rate"
+      - alert: MaskDetectionHighLatency
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(md_http_request_duration_seconds_bucket{route="/v1/analyze"}[5m]))) > 0.5
+        for: 10m
+        labels: {severity: ticket}
+        annotations:
+          summary: "p95 latency of /v1/analyze is above 500 ms"
+          runbook_url: "https://github.com/chan4kum/opencv-face-mask-detection/blob/main/docs/RUNBOOK.md#high-latency"
+      - alert: MaskDetectionLoadShedding
+        expr: sum(rate(md_inference_rejected_total[5m])) > 0
+        for: 5m
+        labels: {severity: ticket}
+        annotations:
+          summary: "Requests are being shed (503) because inference capacity is exhausted; scale out"
+          runbook_url: "https://github.com/chan4kum/opencv-face-mask-detection/blob/main/docs/RUNBOOK.md#load-shedding"
+      - alert: MaskDetectionJobsFailing
+        expr: |
+          sum(rate(md_jobs_processed_total{outcome=~"failed_exhausted|poison"}[10m])) > 0
+        for: 10m
+        labels: {severity: page}
+        annotations:
+          summary: "Async jobs are failing after exhausting retries (infrastructure fault, not bad input)"
+          runbook_url: "https://github.com/chan4kum/opencv-face-mask-detection/blob/main/docs/RUNBOOK.md#jobs-failing"
+      - alert: MaskDetectionQueueBacklog
+        expr: max(nats_consumer_num_pending{consumer_name="md-workers"}) > 500
+        for: 10m
+        labels: {severity: ticket}
+        annotations:
+          summary: "More than 500 jobs have been waiting for 10 minutes; workers are not keeping up"
+          runbook_url: "https://github.com/chan4kum/opencv-face-mask-detection/blob/main/docs/RUNBOOK.md#queue-backlog"
+      - alert: MaskDetectionInstanceDown
+        expr: up{job=~"mask-detection-.*"} == 0
+        for: 5m
+        labels: {severity: page}
+        annotations:
+          summary: "A mask-detection instance is not being scraped"
+      - alert: MaskDetectionManyUncertainEstimates
+        expr: |
+          sum(rate(md_mask_predictions_total{uncertain="true"}[30m]))
+            / clamp_min(sum(rate(md_mask_predictions_total[30m])), 1e-9) > 0.5
+        for: 30m
+        labels: {severity: ticket}
+        annotations:
+          summary: "More than half of mask classifications are flagged uncertain; check image quality (blur, size, lighting) or the input distribution"
+          runbook_url: "https://github.com/chan4kum/opencv-face-mask-detection/blob/main/docs/RUNBOOK.md#many-uncertain-classifications"

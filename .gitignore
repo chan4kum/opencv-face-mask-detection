@@ -1,6 +1,15 @@
 __pycache__/
 *.pyc
 .venv/
-models/
 output*
 .DS_Store
+.env
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+deploy/helm/mask-detection/charts/
+annotated*.jpg
+models/*.part

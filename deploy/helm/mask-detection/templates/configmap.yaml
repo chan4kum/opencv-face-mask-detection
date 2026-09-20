@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fd.fullname" . }}
+  labels: {{- include "fd.labels" . | nindent 4 }}
+data:
+  MD_LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  MD_SCORE_THRESHOLD: {{ .Values.config.scoreThreshold | quote }}
+  MD_NMS_THRESHOLD: {{ .Values.config.nmsThreshold | quote }}
+  MD_MAX_FACES: {{ .Values.config.maxFaces | quote }}
+  MD_MASK_MIN_CONFIDENCE: {{ .Values.config.maskMinConfidence | quote }}
+  MD_MASK_CROP_MARGIN: {{ .Values.config.maskCropMargin | quote }}
+  MD_LOW_RESOLUTION_PX: {{ .Values.config.lowResolutionPx | quote }}
+  MD_DETECTOR_UPSCALE_TO: {{ .Values.config.detectorUpscaleTo | quote }}
+  MD_ORT_INTRA_OP_THREADS: {{ .Values.config.ortIntraOpThreads | quote }}
+  MD_INFERENCE_MAX_SIDE: {{ .Values.config.inferenceMaxSide | quote }}
+  MD_MAX_UPLOAD_BYTES: {{ .Values.config.maxUploadBytes | int64 | quote }}
+  MD_MAX_IMAGE_PIXELS: {{ .Values.config.maxImagePixels | int64 | quote }}
+  MD_MAX_CONCURRENT_INFERENCE: {{ .Values.config.maxConcurrentInference | quote }}
+  MD_INFERENCE_QUEUE_TIMEOUT_S: {{ .Values.config.inferenceQueueTimeoutS | quote }}
+  MD_DOCS_ENABLED: {{ .Values.config.docsEnabled | quote }}
+  MD_CORS_ALLOW_ORIGINS: {{ .Values.config.corsAllowOrigins | quote }}
+  MD_JOB_TTL_S: {{ .Values.config.jobTtlS | quote }}
+  MD_JOB_MAX_DELIVER: {{ .Values.config.jobMaxDeliver | quote }}
+  MD_WORKER_CONCURRENCY: {{ .Values.config.workerConcurrency | quote }}
+  MD_DELETE_INPUT_AFTER_PROCESSING: {{ .Values.config.deleteInputAfterProcessing | quote }}
+  MD_NATS_PROVISION: "true"
