@@ -1,0 +1,4 @@
+opencv-python>=4.8,<5
+tensorflow
+numpy
+scikit-learn
