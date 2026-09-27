@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10.1.0
+      - uses: astral-sh/setup-uv@v10.2.0
         with: {enable-cache: true}
       - run: uv sync --all-groups
       - run: uv run ruff check .
@@ -35,7 +35,7 @@ jobs:
         python: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10.1.0
+      - uses: astral-sh/setup-uv@v10.2.0
         with: {enable-cache: true, python-version: "${{ matrix.python }}"}
       - run: uv sync --all-groups
       - run: uv run pytest -m "not integration"
@@ -58,7 +58,7 @@ jobs:
           docker run -d --name seaweedfs -p 8333:8333 -v /tmp/s3.json:/etc/seaweedfs/s3.json:ro \
             chrislusf/seaweedfs:4.47 server -dir=/data -s3 -s3.config=/etc/seaweedfs/s3.json -master.volumeSizeLimitMB=128 -volume.max=8
           for i in $(seq 1 60); do curl -sf http://127.0.0.1:8333/status >/dev/null && break; sleep 1; done
-      - uses: astral-sh/setup-uv@v10.1.0
+      - uses: astral-sh/setup-uv@v10.2.0
         with: {enable-cache: true}
       - run: uv sync --all-groups
       - name: Unit + integration with the combined coverage gate
