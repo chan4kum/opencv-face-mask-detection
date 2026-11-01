@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.9
 
 # ---- build: resolve and install dependencies into a virtualenv ------------------------------------
-FROM python:3.12-slim-bookworm AS build
+FROM python:3.15-slim-bookworm AS build
 COPY --from=ghcr.io/astral-sh/uv:0.11 /uv /uvx /usr/local/bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never UV_NO_CACHE=1
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN uv sync --frozen --no-dev --no-editable
 
 
 # ---- runtime: minimal image, non-root, no build tools -----------------------------------------------
-FROM python:3.12-slim-bookworm AS runtime
+FROM python:3.15-slim-bookworm AS runtime
 
 ARG VERSION=dev
 ARG REVISION=unknown
